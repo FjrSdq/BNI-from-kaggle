@@ -3,6 +3,8 @@ import pandas as pd
 import seaborn as sns
 import torch
 import numpy as np
+import os
+from huggingface_hub import hf_hub_download
 import matplotlib.pyplot as plt
 from datetime import timedelta, datetime
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -10,6 +12,29 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 st.set_page_config(page_title="Wondr by BNI Dashboard", 
                    page_icon="📊", 
                    layout="wide")
+
+
+MODEL_PATH = "best_indobert_sentiment.pt"
+
+# ENSURE MODEL IS LOADED
+def ensure_model():
+    """Download model from Hugging Face if not present locally"""
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Downloading model from Hugging Face..."):
+            try:
+                hf_hub_download(
+                    repo_id="FjrSdq/bni-sentiment-model",
+                    filename=MODEL_PATH,
+                    local_dir=".",
+                    local_dir_use_symlinks=False
+                )
+                st.success("✅ Model downloaded successfully!")
+            except Exception as e:
+                st.error(f"❌ Error downloading model: {e}")
+                st.stop()
+
+# Call the function to ensure the model is available
+ensure_model()
 
 # CACHE FUNCTION
 @st.cache_resource
