@@ -65,7 +65,7 @@ def load_data():
     df = pd.read_csv("wondr_sample_1500_with_label - Copy.csv")
 
     # Convert datetime column
-    df['At'] = pd.to_datetime(df['At'])
+    df['at'] = pd.to_datetime(df['at'])
 
     # Map labels to name
     label_map = {1: 'Negatif', 3: 'Positif'}
@@ -74,7 +74,7 @@ def load_data():
     if 'content_clean' not in df.columns:
         df['content_clean'] = df['content']
 
-    df = df.sort_values('At', ascending=False).reset_index(drop=True)
+    df = df.sort_values('at', ascending=False).reset_index(drop=True)
 
     return df
 
@@ -123,8 +123,8 @@ with st.sidebar:
     st.header("📅 Date Filter")
 
     # Date range filter
-    min_date = df['At'].min().date()
-    max_date = df['At'].max().date()
+    min_date = df['at'].min().date()
+    max_date = df['at'].max().date()
     default_start = max_date - timedelta(days=30)
     default_end = max_date
 
@@ -168,7 +168,7 @@ with st.sidebar:
 # FILTER DATA
 
 #Apply date filter
-mask = (df['At'].dt.date >= start_date) & (df['At'].dt.date <= end_date)
+mask = (df['at'].dt.date >= start_date) & (df['at'].dt.date <= end_date)
 df_filtered = df[mask].copy()
 
 # MAIN CONTENT
@@ -215,7 +215,7 @@ with col1:
     st.subheader("📈 Sentiment Trend Over Time")
 
     # Group by date
-    df_daily = df_filtered.groupby(df_filtered['At'].dt.date)['label_name'].value_counts().unstack(fill_value=0)
+    df_daily = df_filtered.groupby(df_filtered['at'].dt.date)['label_name'].value_counts().unstack(fill_value=0)
 
     if not df_daily.empty:
         # Ensure columns exist
@@ -251,7 +251,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     df_weekly = df_filtered.copy()
-    df_weekly['week'] = df_weekly['At'].dt.to_period('W')
+    df_weekly['week'] = df_weekly['at'].dt.to_period('W')
     weekly_summary = df_weekly.groupby('week')['label_name'].value_counts().unstack(fill_value=0)
 
     if not weekly_summary.empty:
@@ -264,7 +264,7 @@ with col1:
 with col2:
         # Monthly Sentiment
         df_monthly = df_filtered.copy()
-        df_monthly['month'] = df_monthly['At'].dt.to_period('M')
+        df_monthly['month'] = df_monthly['at'].dt.to_period('M')
         monthly_summary = df_monthly.groupby('month')['label_name'].value_counts().unstack(fill_value=0)
 
         if not monthly_summary.empty:
@@ -279,7 +279,7 @@ st.markdown("----")
 # RECENT REVIEWS
 
 with st.expander("📁 Recent Reviews", expanded=True):
-    display_cols = ['reviewId','content','At','label_name']
+    display_cols = ['reviewId','content','at','label_name']
     df_display = df_filtered[display_cols].copy()
     
     # Truncate long content
@@ -298,7 +298,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         column_config={
             'reviewId':'Review ID',
             'content':'Review Content',
-            'At':'Date',
+            'at':'Date',
             'label_name':'Sentiment'
         }
     )
