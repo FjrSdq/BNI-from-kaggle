@@ -40,7 +40,10 @@ ensure_model()
 @st.cache_resource
 def load_model():
     """Load the trained IndoBERT model"""
-    device = AutoTokenizer.from_pretrained("mdhugol/indonesia-bert-sentiment-classification")
+    tokenizer = AutoTokenizer.from_pretrained("mdhugol/indonesia-bert-sentiment-classification")
+
+    # Set device separately
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load model
     model = AutoModelForSequenceClassification.from_pretrained(
@@ -172,7 +175,7 @@ df_filtered = df[mask].copy()
 
 st.title("📊 Sentiment Analysis = Wondr bby BNI App Reviews")
 st.markdown(f"Analyzing {len(df_filtered)} reviews from {start_date.strftime('%d %b %Y')} to {end_date.strftime('%d %b %Y')}*")
-str.markdown("----")
+st.markdown("----")
 
 
 # KEY METRICS
@@ -229,7 +232,7 @@ with col2:
     fig, ax = plt.subplots(figsize=(6, 4))
     labels = ['Positif', 'Negatif']
     sizes = [positif_count, negatif_count]
-    colors = ['#29b5e8', 'D45B90']
+    colors = ['#29b5e8', '#D45B90']
     explode = (0.05, 0.05)
 
     ax.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
