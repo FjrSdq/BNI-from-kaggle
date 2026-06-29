@@ -28,7 +28,7 @@ def ensure_model():
                     local_dir=".",
                     local_dir_use_symlinks=False
                 )
-                st.success("✅ Model downloaded successfully!")
+                st.toast("✅ Model downloaded successfully!")
             except Exception as e:
                 st.error(f"❌ Error downloading model: {e}")
                 st.stop()
@@ -108,11 +108,11 @@ def predict_sentiment(text, tokenizer, model, device):
 
 st.sidebar.markdown("###📊Loading Data....")
 df = load_data()
-st.sidebar.success(f"✅Loaded {len(df)} reviews")
+st.sidebar.toast(f"✅Loaded {len(df)} reviews")
 
 st.sidebar.markdown("###🤖Loading Model...")
 tokenizer, model, device = load_model()
-st.sidebar.success(f"✅ Model ready on {str(device).upper()}")
+st.sidebar.toast(f"✅ Model ready on {str(device).upper()}")
 
 # SIDEBAR (FILTERS & PREDICTIONS)
 
