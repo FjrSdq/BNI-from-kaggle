@@ -15,9 +15,9 @@ st.set_page_config(page_title="Wondr by BNI Dashboard",
                    layout="wide")
 
 
+# ENSURE MODEL IS LOADED
 MODEL_PATH = "best_indobert_sentiment.pt"
 
-# ENSURE MODEL IS LOADED
 def ensure_model():
     """Download model from Hugging Face if not present locally"""
     if not os.path.exists(MODEL_PATH):
@@ -111,15 +111,18 @@ if 'toasts_shown' not in st.session_state:
     st.session_state.toasts_shown = False
 
 if not st.session_state.toasts_shown:
-    with st.spinner("###📊Loading Data...."):
+    with st.spinner("📊 Loading Data...."):
         df = load_data()
     st.toast(f"✅Loaded {len(df)} reviews")
 
-with st.spinner("###🤖Loading Model..."):
-    tokenizer, model, device = load_model()
-st.toast(f"✅ Model ready on {str(device).upper()}")
+    with st.spinner("🤖 Loading Model..."):
+        tokenizer, model, device = load_model()
+    st.toast(f"✅ Model ready on {str(device).upper()}")
 
-st.session_state.toasts_shown = True
+    st.session_state.toasts_shown = True
+else:
+    df = load_data()
+    tokenizer, model, device = load_model()
 
 # SIDEBAR (FILTERS & PREDICTIONS)
 
@@ -150,7 +153,7 @@ with st.sidebar:
     )
 
     st.markdown("----")
-    st.header("🔍Quick Prediction")
+    st.header("🔍 Quick Prediction")
 
     user_input = st.text_area(
         "Enter a review:",
@@ -224,7 +227,7 @@ with col1:
     # Add filter dropdown
     trend_filter = st.radio(
         "Show:",
-        ["Both:","Positif Only", "Negatif Only"],
+        ["Both", "Positif Only", "Negatif Only"],
         horizontal=True,
         key="trend_filter"
     )
@@ -239,7 +242,7 @@ with col1:
         df_daily['Negatif'] = 0
 
     df_daily = df_daily.reset_index()
-    df_daily.columns = ['Date','Positif','Negatif']
+    df_daily.columns = ['Date', 'Positif', 'Negatif']
 
     df_melted = df_daily.melt(id_vars='Date', value_vars=['Positif', 'Negatif'], 
                               var_name='Sentiment', value_name='Count')
@@ -258,8 +261,9 @@ with col1:
         y='Count:Q',
         color=alt.Color(
             'Sentiment:N', 
-            scale=alt.Scale(domain=['Positif', 'Negatif'], 
-            range=['#29b5e8', '#D45B90']
+            scale=alt.Scale(
+                domain=['Positif', 'Negatif'], 
+                range=['#29b5e8', '#D45B90']
             )
         ),
         tooltip=['Date', 'Sentiment', 'Count']
@@ -323,7 +327,7 @@ st.markdown("----")
 # RECENT REVIEWS
 
 with st.expander("📁 Recent Reviews", expanded=True):
-    display_cols = ['reviewId','content','at','label_name']
+    display_cols = ['reviewId', 'content', 'at', 'label_name']
     df_display = df_filtered[display_cols].copy()
     
     # Truncate long content
