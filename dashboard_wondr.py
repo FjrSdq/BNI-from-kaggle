@@ -3,7 +3,6 @@ import pandas as pd
 import seaborn as sns
 import torch
 import numpy as np
-import altair as alt
 import os
 from huggingface_hub import hf_hub_download
 import matplotlib.pyplot as plt
@@ -240,38 +239,16 @@ with col1:
         df_daily['Positif'] = 0
     if 'Negatif' not in df_daily.columns:
         df_daily['Negatif'] = 0
-
-    df_daily = df_daily.reset_index()
-    df_daily.columns = ['Date', 'Positif', 'Negatif']
-
-    df_melted = df_daily.melt(id_vars='Date', value_vars=['Positif', 'Negatif'], 
-                              var_name='Sentiment', value_name='Count')
     
     # Filter based on selection
     if trend_filter == "Positif Only":
-        df_filtered_chart = df_melted[df_melted['Sentiment'] == 'Positif']
+        chart_data = df_daily[['Positif']]
+        st.line_chart(chart_data, color='#29b5e8', use_container_width=True)
     elif trend_filter == "Negatif Only":
-        df_filtered_chart = df_melted[df_melted['Sentiment'] == 'Negatif']
+        chart_data = df_daily[['Negatif']]
+        st.line_chart(chart_data, color='#D45B90', use_container_width=True)
     else:
-        df_filtered_chart = df_melted
-
-    # Create Altair chart with custom colors
-    chart = alt.Chart(df_filtered_chart).mark_line(point=True).encode(
-        x='Date:T',
-        y='Count:Q',
-        color=alt.Color(
-            'Sentiment:N', 
-            scale=alt.Scale(
-                domain=['Positif', 'Negatif'], 
-                range=['#29b5e8', '#D45B90']
-            )
-        ),
-        tooltip=['Date', 'Sentiment', 'Count']
-    ).properties(
-        height=400
-    ).interactive()
-
-    st.altair_chart(chart, use_container_width=True)
+        st.line_chart(df_daily, color=['#29b5e8', '#D45B90'], use_container_width=True)
 
 
 with col2:
