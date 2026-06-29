@@ -106,11 +106,11 @@ def predict_sentiment(text, tokenizer, model, device):
 
 # LOAD DATA AND MODEL
 
-st.sidebar.markdown("###📊Loading Data....")
+st.toast("###📊Loading Data....")
 df = load_data()
 st.toast(f"✅Loaded {len(df)} reviews")
 
-st.sidebar.markdown("###🤖Loading Model...")
+st.toast("###🤖Loading Model...")
 tokenizer, model, device = load_model()
 st.toast(f"✅ Model ready on {str(device).upper()}")
 
