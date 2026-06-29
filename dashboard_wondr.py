@@ -106,13 +106,19 @@ def predict_sentiment(text, tokenizer, model, device):
 
 # LOAD DATA AND MODEL
 
-st.toast("###📊Loading Data....")
-df = load_data()
-st.toast(f"✅Loaded {len(df)} reviews")
+if 'toasts_shown' not in st.session_state:
+    st.session_state.toasts_shown = False
 
-st.toast("###🤖Loading Model...")
-tokenizer, model, device = load_model()
+if not st.session_state.toasts_shown:
+    with st.spinner("###📊Loading Data...."):
+        df = load_data()
+    st.toast(f"✅Loaded {len(df)} reviews")
+
+with st.spinner("###🤖Loading Model..."):
+    tokenizer, model, device = load_model()
 st.toast(f"✅ Model ready on {str(device).upper()}")
+
+st.session_state.toasts_shown = True
 
 # SIDEBAR (FILTERS & PREDICTIONS)
 
@@ -241,7 +247,7 @@ with col1:
     else:
         chart_data = df_daily[['Positif', 'Negatif']]
         st.line_chart(chart_data)
-        
+
 
 with col2:
     st.subheader("📊Sentimen Distribution")
