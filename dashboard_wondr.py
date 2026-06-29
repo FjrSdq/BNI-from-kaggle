@@ -299,7 +299,8 @@ col1, col2 = st.columns(2)
 
 with col1:
     df_weekly = df_filtered.copy()
-    df_weekly['week'] = df_weekly['at'].dt.to_period('W')
+    
+    df_weekly['week'] = df_weekly['at'].dt.to_period('W').astype(str)
     weekly_summary = df_weekly.groupby('week')['label_name'].value_counts().unstack(fill_value=0)
 
     if not weekly_summary.empty:
@@ -312,7 +313,7 @@ with col1:
 with col2:
         # Monthly Sentiment
         df_monthly = df_filtered.copy()
-        df_monthly['month'] = df_monthly['at'].dt.to_period('M')
+        df_monthly['month'] = df_monthly['at'].dt.to_period('M').astype(str)
         monthly_summary = df_monthly.groupby('month')['label_name'].value_counts().unstack(fill_value=0)
 
         if not monthly_summary.empty:
