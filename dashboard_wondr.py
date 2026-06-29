@@ -173,7 +173,7 @@ df_filtered = df[mask].copy()
 
 # MAIN CONTENT
 
-st.title("📊 Sentiment Analysis = Wondr bby BNI App Reviews")
+st.title("📊 Sentiment Analysis = Wondr by BNI App Reviews")
 st.markdown(f"Analyzing {len(df_filtered)} reviews from {start_date.strftime('%d %b %Y')} to {end_date.strftime('%d %b %Y')}*")
 st.markdown("----")
 
@@ -214,17 +214,34 @@ col1, col2 = st.columns([3, 2])
 with col1:
     st.subheader("📈 Sentiment Trend Over Time")
 
+    # Add filter dropdown
+    trend_filter = st.radio(
+        "Show:",
+        ["Both:","Positif Only", "Negatif Only"],
+        horizontal=True,
+        key="trend_filter"
+    )
+
     # Group by date
     df_daily = df_filtered.groupby(df_filtered['at'].dt.date)['label_name'].value_counts().unstack(fill_value=0)
 
-    if not df_daily.empty:
-        # Ensure columns exist
-        if 'Positif' not in df_daily.columns:
-            df_daily['Positif'] = 0
-        if 'Negatif' not in df_daily.columns:
-            df_daily['Negatif'] = 0
+    # Ensure columns exist
+    if 'Positif' not in df_daily.columns:
+        df_daily['Positif'] = 0
+    if 'Negatif' not in df_daily.columns:
+        df_daily['Negatif'] = 0
 
-        st.line_chart(df_daily[['Positif', 'Negatif']])
+    # Filter based on selection
+    if trend_filter == "Positif Only":
+        chart_data = df_daily[['Positif']]
+        st.line_chart(chart_data, color='#29b5e8')
+    elif trend_filter == "Negatif Only":
+        chart_data = df_daily[['Negatif']]
+        st.line_chart(chart_data, color='#D45B90')
+    else:
+        chart_data = df_daily[['Positif', 'Negatif']]
+        st.line_chart(chart_data)
+        
 
 with col2:
     st.subheader("📊Sentimen Distribution")
