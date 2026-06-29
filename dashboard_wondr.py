@@ -248,7 +248,7 @@ with col1:
         chart_data = df_daily[['Negatif']]
         st.line_chart(chart_data, color='#D45B90', use_container_width=True)
     else:
-        st.line_chart(df_daily, color=['#29b5e8', '#D45B90'], use_container_width=True)
+        st.line_chart(df_daily, color=['#D45B90', '#29b5e8'], use_container_width=True)
 
 
 with col2:
