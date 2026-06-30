@@ -14,21 +14,6 @@ st.set_page_config(page_title="Wondr by BNI Dashboard",
                    layout="wide")
 
 
-# CSS For st.metric() recolor
-st.markdown("""
-    <style>
-    /* Remove the arrow icon from metric deltas */
-    [data-testid="metric-container"] .stMetricDelta svg {
-        display: none !important;
-    }
-    
-    /* Make delta text neutral color (no green/red) */
-    [data-testid="metric-container"] .stMetricDelta {
-        color: #666666 !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
 # ENSURE MODEL IS LOADED
 MODEL_PATH = "best_indobert_sentiment.pt"
 
