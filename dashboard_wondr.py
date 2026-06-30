@@ -285,7 +285,7 @@ with col1:
         # Calculate Percentages
         weekly_pct = weekly_summary.div(weekly_summary.sum(axis=1), axis=0) * 100
         weekly_pct = weekly_pct.tail(8) # Last 8 weeks
-        st.bar_chart(weekly_pct[['Positif', 'Negatif']] if 'Negatif' in weekly_pct.columns else weekly_pct)
+        st.bar_chart(weekly_pct[['Positif', 'Negatif']] if 'Negatif' in weekly_pct.columns else weekly_pct, color=['#D45B90', '#29b5e8'])
 
 with col2:
         # Monthly Sentiment
@@ -297,7 +297,7 @@ with col2:
             st.caption("Monthly Sentiment")
             monthly_pct = monthly_summary.div(monthly_summary.sum(axis=1), axis=0) * 100
             monthly_pct = monthly_pct.tail(12) # Last 12 months
-            st.bar_chart(monthly_pct[['Positif', 'Negatif']] if 'Negatif' in monthly_pct.columns else monthly_pct)
+            st.bar_chart(monthly_pct[['Positif', 'Negatif']] if 'Negatif' in monthly_pct.columns else monthly_pct, color=['#D45B90', '#29b5e8'])
 
 st.markdown("----")
 
