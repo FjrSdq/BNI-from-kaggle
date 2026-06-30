@@ -17,25 +17,14 @@ st.set_page_config(page_title="Wondr by BNI Dashboard",
 # CSS For st.metric() recolor
 st.markdown("""
     <style>
-    /* Remove the arrow icon */
+    /* Remove the arrow icon from metric deltas */
     [data-testid="metric-container"] .stMetricDelta svg {
         display: none !important;
     }
     
-    /* Make delta a neutral color (gray) */
+    /* Make delta text neutral color (no green/red) */
     [data-testid="metric-container"] .stMetricDelta {
         color: #666666 !important;
-    }
-    
-    /* Or make it match your theme (e.g., dark gray) */
-    [data-testid="metric-container"] .stMetricDelta {
-        color: #333333 !important;
-    }
-    
-    /* Or make it italic for a subtle look */
-    [data-testid="metric-container"] .stMetricDelta {
-        color: #666666 !important;
-        font-style: italic !important;
     }
     </style>
 """, unsafe_allow_html=True)
