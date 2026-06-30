@@ -202,7 +202,7 @@ with col2:
         pct_positif = positif_count / total * 100 if total > 0 else 0
         st.metric(
             "Positif", 
-            f"{positif_count:,} ({pct_positif:.1f}%")
+            f"{positif_count:,}", delta=f"({pct_positif:.1f}%")
 
 with col3:
     with st.container(border=True):
@@ -210,7 +210,7 @@ with col3:
         pct_negatif = negatif_count / total * 100 if total > 0 else 0
         st.metric(
             "Negatif", 
-            f"{negatif_count:,} ({pct_negatif:.1f}%)")
+            f"{negatif_count:,}", delta=f"({pct_negatif:.1f}%)")
 
 with col4:
     with st.container(border=True):
