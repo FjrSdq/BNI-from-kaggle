@@ -200,13 +200,17 @@ with col2:
     with st.container(border=True):
         positif_count = len(df_filtered[df_filtered['label_name'] == 'Positif'])
         pct_positif = positif_count / total * 100 if total > 0 else 0
-        st.metric("Positif", f"{positif_count:,}", f"{pct_positif:.1f}%")
+        st.metric(
+            "Positif", 
+            f"{positif_count:,} ({pct_positif:.1f}%")
 
 with col3:
     with st.container(border=True):
         negatif_count = len(df_filtered[df_filtered['label_name'] == 'Negatif'])
         pct_negatif = negatif_count / total * 100 if total > 0 else 0
-        st.metric("Negatif", f"{negatif_count:,}", f"{pct_negatif:.1f}%")
+        st.metric(
+            "Negatif", 
+            f"{negatif_count:,} ({pct_negatif:.1f}%)")
 
 with col4:
     with st.container(border=True):
