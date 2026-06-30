@@ -14,6 +14,21 @@ st.set_page_config(page_title="Wondr by BNI Dashboard",
                    layout="wide")
 
 
+# CSS For st.metric() recolor
+st.markdown("""
+    <style>
+    /* Remove the arrow icon from metric deltas */
+    [data-testid="metric-container"] .stMetricDelta svg {
+        display: none !important;
+    }
+    
+    /* Make delta text neutral (no green/red) */
+    [data-testid="metric-container"] .stMetricDelta {
+        color: #666666 !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # ENSURE MODEL IS LOADED
 MODEL_PATH = "best_indobert_sentiment.pt"
 
@@ -202,7 +217,7 @@ with col2:
         pct_positif = positif_count / total * 100 if total > 0 else 0
         st.metric(
             "Positif", 
-            f"{positif_count:,}", delta=f"({pct_positif:.1f}%")
+            f"{positif_count:,}", delta=f"{pct_positif:.1f}%")
 
 with col3:
     with st.container(border=True):
@@ -210,7 +225,7 @@ with col3:
         pct_negatif = negatif_count / total * 100 if total > 0 else 0
         st.metric(
             "Negatif", 
-            f"{negatif_count:,}", delta=f"({pct_negatif:.1f}%)")
+            f"{negatif_count:,}", delta=f"{pct_negatif:.1f}%")
 
 with col4:
     with st.container(border=True):
