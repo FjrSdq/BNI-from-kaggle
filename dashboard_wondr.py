@@ -62,7 +62,7 @@ def load_model():
 @st.cache_data
 def load_data():
     """Load and preprocess CSV data"""
-    df = pd.read_csv("wondr_sample_1500_with_label - Copy.csv")
+    df = pd.read_csv("wondr_sample_1500_cleaned.csv")
 
     # Convert datetime column
     df['at'] = pd.to_datetime(df['at'])
