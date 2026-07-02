@@ -315,18 +315,11 @@ with st.expander("📁 Recent Reviews", expanded=True):
     display_cols = ['reviewId', content_col, 'at', 'label_name']
     df_display = df_filtered[display_cols].copy()
     
-    # Check for 'content_clean' column and use it if available
-    if 'content_clean' in df_filtered.columns:
-        display_cols.append('content_clean')
-        content_col = 'content_clean'
-    else:
-        display_cols.append('content')
-        content_col = 'content'
+    # Rename content column for display
+    df_display = df_display.rename(columns={content_col: 'content'})
     
-    df_display = df_filtered[display_cols].copy()
-    
-    # Rename content column to 'content' for consistent display
-    df_display.rename(columns={content_col: 'content'}, inplace=True)
+    # Ensure content is string and handle NaN
+    df_display['content'] = df_display['content'].fillna('').astype(str)
     
     # Truncate long content
     df_display['content'] = df_display['content'].astype(str).str[:100] + '....'
