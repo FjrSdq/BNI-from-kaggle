@@ -309,7 +309,10 @@ st.markdown("----")
 # RECENT REVIEWS
 
 with st.expander("📁 Recent Reviews", expanded=True):
-    display_cols = ['reviewId', 'content', 'at', 'label_name']
+    # Use content_clean if available, otherwise fallback to content
+    content_col = 'content_clean' if 'content_clean' in df_filtered.columns else 'content'
+    
+    display_cols = ['reviewId', content_col, 'at', 'label_name']
     df_display = df_filtered[display_cols].copy()
     
     # Check for 'content_clean' column and use it if available
