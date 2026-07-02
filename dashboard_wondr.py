@@ -329,7 +329,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
     df_display.rename(columns={content_col: 'content'}, inplace=True)
     
     # Truncate long content
-    df_display['content'] = df_display['content'].str[:100] + '....'
+    df_display['content'] = df_display['content'].astype(str).str[:100] + '....'
 
     # Color code labels
     df_display['label_name'] = df_display['label_name'].map({
