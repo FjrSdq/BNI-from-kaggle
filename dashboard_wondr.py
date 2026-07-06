@@ -134,7 +134,7 @@ with st.sidebar:
     # Date range filter
     min_date = df['at'].min().date()
     max_date = df['at'].max().date()
-    default_start = max_date - timedelta(days=30)
+    default_start = min_date
     default_end = max_date
 
     start_date = st.date_input(
