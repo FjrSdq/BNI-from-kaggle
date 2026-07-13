@@ -233,23 +233,26 @@ with st.expander("📁 Recent Reviews", expanded=True):
     display_cols = ['reviewId', content_col, 'at', 'label_name']
     df_display = df_filtered[display_cols].copy()
     
-    # Rename content column for display
-    df_display = df_display.rename(columns={content_col: 'content'})
+    if df_display.empty:
+        st.info(f"No reviews available for the selected date range: {start_date} to {end_date}.")
+    else:
+        # Rename content column for display
+        df_display = df_display.rename(columns={content_col: 'content'})
     
-    # Ensure content is string and handle NaN
-    df_display['content'] = df_display['content'].fillna('').astype(str)
+        # Ensure content is string and handle NaN
+        df_display['content'] = df_display['content'].fillna('').astype(str)
     
-    # Truncate long content
-    df_display['content'] = df_display['content'].astype(str).str[:100] + '....'
+        # Truncate long content
+        df_display['content'] = df_display['content'].astype(str).str[:100] + '....'
 
-    # Color code labels
-    df_display['label_name'] = df_display['label_name'].map({
-        'Positif': '✅ Positif',
-        'Negatif': '❌ Negatif'
-    })
+        # Color code labels
+        df_display['label_name'] = df_display['label_name'].map({
+            'Positif': '✅ Positif',
+            'Negatif': '❌ Negatif'
+        })
 
     st.dataframe(
-        df_display.head(20),
+        df_display,
         use_container_width=True,
         height=400,
         column_config={
