@@ -132,24 +132,29 @@ with st.sidebar:
     st.header("📅 Date Filter")
 
     # Date range filter
-    min_date = df['at'].min().date()
-    max_date = df['at'].max().date()
-    default_start = min_date
-    default_end = max_date
+    if 'df' in locals() and not df.empty:
+        min_date = df['at'].min().date()
+        max_date = df['at'].max().date()
+        default_start = min_date
+        default_end = max_date
 
-    start_date = st.date_input(
-        "Start Date",
-        default_start,
-        min_value=min_date,
-        max_value=max_date
-    )
+        start_date = st.date_input(
+            "Start Date",
+            default_start,
+            min_value=min_date,
+            max_value=max_date
+        )
 
-    end_date = st.date_input(
-        "End Date",
-        default_end,
-        min_value=min_date,
-        max_value=max_date
-    )
+        end_date = st.date_input(
+            "End Date",
+            default_end,
+            min_value=min_date,
+            max_value=max_date
+        )
+    else:
+        st.warning("Data not loaded yet.")
+        start_date = datetime.now().date() - timedelta(days=30)
+        end_date = datetime.now().date()
 
     st.markdown("----")
     st.header("🔍 Quick Prediction")
