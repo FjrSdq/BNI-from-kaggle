@@ -219,6 +219,44 @@ with col4:
 
 st.markdown("----")
 
+# RECENT REVIEWS
+
+with st.expander("📁 Recent Reviews", expanded=True):
+    # Use content_clean if available, otherwise fallback to content
+    content_col = 'content_clean' if 'content_clean' in df_filtered.columns else 'content'
+    
+    display_cols = ['reviewId', content_col, 'at', 'label_name']
+    df_display = df_filtered[display_cols].copy()
+    
+    # Rename content column for display
+    df_display = df_display.rename(columns={content_col: 'content'})
+    
+    # Ensure content is string and handle NaN
+    df_display['content'] = df_display['content'].fillna('').astype(str)
+    
+    # Truncate long content
+    df_display['content'] = df_display['content'].astype(str).str[:100] + '....'
+
+    # Color code labels
+    df_display['label_name'] = df_display['label_name'].map({
+        'Positif': '✅ Positif',
+        'Negatif': '❌ Negatif'
+    })
+
+    st.dataframe(
+        df_display.head(20),
+        use_container_width=True,
+        height=400,
+        column_config={
+            'reviewId':'Review ID',
+            'content':'Review Content',
+            'at':'Date',
+            'label_name':'Sentiment'
+        }
+    )
+
+st.markdown("----")
+
 
 # SENTIMENT DISTRIBUTION CHART
 
@@ -302,45 +340,6 @@ with col2:
             monthly_pct = monthly_summary.div(monthly_summary.sum(axis=1), axis=0) * 100
             monthly_pct = monthly_pct.tail(12) # Last 12 months
             st.bar_chart(monthly_pct[['Positif', 'Negatif']] if 'Negatif' in monthly_pct.columns else monthly_pct, color=['#29b5e8','#D45B90'])
-
-st.markdown("----")
-
-
-# RECENT REVIEWS
-
-with st.expander("📁 Recent Reviews", expanded=True):
-    # Use content_clean if available, otherwise fallback to content
-    content_col = 'content_clean' if 'content_clean' in df_filtered.columns else 'content'
-    
-    display_cols = ['reviewId', content_col, 'at', 'label_name']
-    df_display = df_filtered[display_cols].copy()
-    
-    # Rename content column for display
-    df_display = df_display.rename(columns={content_col: 'content'})
-    
-    # Ensure content is string and handle NaN
-    df_display['content'] = df_display['content'].fillna('').astype(str)
-    
-    # Truncate long content
-    df_display['content'] = df_display['content'].astype(str).str[:100] + '....'
-
-    # Color code labels
-    df_display['label_name'] = df_display['label_name'].map({
-        'Positif': '✅ Positif',
-        'Negatif': '❌ Negatif'
-    })
-
-    st.dataframe(
-        df_display.head(20),
-        use_container_width=True,
-        height=400,
-        column_config={
-            'reviewId':'Review ID',
-            'content':'Review Content',
-            'at':'Date',
-            'label_name':'Sentiment'
-        }
-    )
 
 st.markdown("----")
 
