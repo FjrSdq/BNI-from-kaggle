@@ -9,6 +9,14 @@ import matplotlib.pyplot as plt
 from datetime import timedelta, datetime
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
+
+# SET UP HUGGING FACE TOKEN
+if 'HF_TOKEN' in st.secrets:
+    os.environ['HF_TOKEN'] = st.secrets['HF_TOKEN']
+    print("✅ Hugging Face token set successfully.")
+else:
+    print("❌ Hugging Face token not found in Streamlit secrets. Please set it as 'HF_TOKEN'.")
+
 st.set_page_config(page_title="Wondr by BNI Dashboard", 
                    page_icon="📊", 
                    layout="wide")
@@ -26,12 +34,15 @@ def ensure_model():
                     repo_id="FjrSdq/bni-sentiment-model",
                     filename=MODEL_PATH,
                     local_dir=".",
-                    local_dir_use_symlinks=False
+                    local_dir_use_symlinks=False,
+                    resume_download=True
                 )
                 st.toast("✅ Model downloaded successfully!")
             except Exception as e:
                 st.error(f"❌ Error downloading model: {e}")
                 st.stop()
+    else:
+        st.toast("✅ Model already exists locally.")
 
 # Call the function to ensure the model is available
 ensure_model()
