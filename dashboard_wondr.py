@@ -156,14 +156,35 @@ with st.sidebar:
                 max_value=max_date
         )
     
-        filter_button = st.button("Apply Filter", type="primary", use_container_width=True)
+        # APPLY & RESET BUTTONS
+        btn_col1, btn_col2 = st.columns(2)
         
-        # Store in session state once confirmed
+        with btn_col1:
+            filter_button = st.button("✅ Apply Filter", 
+                                      type="primary", 
+                                      use_container_width=True)
+        
+        with btn_col2:
+            reset_button = st.button("🔄 Reset Filter", 
+                                     type="secondary", 
+                                     use_container_width=True)
+        
+        # Handle reset button
+        if reset_button:
+            if 'start_date' in st.session_state:
+                del st.session_state['start_date']
+            if 'end_date' in st.session_state:
+                del st.session_state['end_date']
+            st.toast("🔄Date filter reset!")
+            st.rerun()
+        
+        # Handle Apply Button
         if filter_button:
             st.session_state['start_date'] = start_date
             st.session_state['end_date'] = end_date
             st.toast("✅Date filter applied!")
         
+        # Use stored values if existing, otherwise use defaults
         if 'start_date' in st.session_state and 'end_date' in st.session_state:
             final_start_date = st.session_state.start_date
             final_end_date = st.session_state.end_date
@@ -202,6 +223,7 @@ with st.sidebar:
             st.metric("Confidence",f"{confidence:.2%}")
         else:
             st.warning("Please enter some text")
+    
 
 
 # FILTER DATA
@@ -213,7 +235,7 @@ df_filtered = df[mask].copy()
 # MAIN CONTENT
 
 st.title("📊 Sentiment Analysis = Wondr by BNI App Reviews")
-st.markdown(f"Analyzing {len(df_filtered)} reviews from {start_date.strftime('%d %b %Y')} to {end_date.strftime('%d %b %Y')}*")
+st.markdown(f"Analyzing {len(df_filtered)} reviews from {final_start_date.strftime('%d %b %Y')} to {final_end_date.strftime('%d %b %Y')}*")
 st.markdown("----")
 
 
