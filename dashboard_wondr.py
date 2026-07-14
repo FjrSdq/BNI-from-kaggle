@@ -137,24 +137,49 @@ with st.sidebar:
         max_date = df['at'].max().date()
         default_start = min_date
         default_end = max_date
-
-        start_date = st.date_input(
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            start_date = st.date_input(
             "Start Date",
             default_start,
             min_value=min_date,
             max_value=max_date
         )
 
-        end_date = st.date_input(
-            "End Date",
-            default_end,
-            min_value=min_date,
-            max_value=max_date
+        with col2:
+            end_date = st.date_input(
+                "End Date",
+                default_end,
+                min_value=min_date,
+                max_value=max_date
         )
+    
+        filter_button = st.button("Apply Filter", type="primary", use_container_width=True)
+        
+        # Store in session state once confirmed
+        if filter_button:
+            st.session_state['start_date'] = start_date
+            st.session_state['end_date'] = end_date
+            st.toast("✅Date filter applied!")
+        
+        if 'start_date' in st.session_state and 'end_date' in st.session_state:
+            final_start_date = st.session_state.start_date
+            final_end_date = st.session_state.end_date
+            # Show current filter
+            st.caption(f"📌Filtering: {final_start_date.strftime('%d %b %Y')} to {final_end_date.strftime('%d %b %Y')}")
+        else:
+            final_start_date = start_date
+            final_end_date = end_date
+            
     else:
-        st.warning("Data not loaded yet.")
+        st.warning("💀Data not loaded yet.")
         start_date = datetime.now().date() - timedelta(days=30)
         end_date = datetime.now().date()
+        final_start_date = start_date
+        final_end_date = end_date
+        filter_button = False
 
     st.markdown("----")
     st.header("🔍 Quick Prediction")
@@ -182,7 +207,7 @@ with st.sidebar:
 # FILTER DATA
 
 #Apply date filter
-mask = (df['at'].dt.date >= start_date) & (df['at'].dt.date <= end_date)
+mask = (df['at'].dt.date >= final_start_date) & (df['at'].dt.date <= final_end_date)
 df_filtered = df[mask].copy()
 
 # MAIN CONTENT
