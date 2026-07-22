@@ -149,60 +149,41 @@ with st.sidebar:
         default_start = min_date
         default_end = max_date
         
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            start_date = st.date_input(
-                "Start Date",
-                st.session_state.filter_start_date,
-                min_value=min_date,
-                max_value=max_date,
-                key = "start_date_input"
+        # Date input
+        start_date = st.date_input(
+            "Start Date",
+            default_start,
+            min_value=min_date,
+            max_value=max_date,
+            key="start_date_input"
         )
 
-        with col2:
-            end_date = st.date_input(
-                "End Date",
-                st.session_state.filter_end_date,
-                min_value=min_date,
-                max_value=max_date,
-                key = "end_date_input"
-            )
-    
-        # APPLY & RESET BUTTONS
-        btn_col1, btn_col2 = st.columns(2)
+        end_date = st.date_input(
+            "End Date",
+            default_end,
+            min_value=min_date,
+            max_value=max_date,
+            key="end_date_input"
+        )
         
-        with btn_col1:
-            if st.button("✅ Apply Filter", type="primary", use_container_width=True):
-                st.session_state.filter_start_date = start_date
-                st.session_state.filter_end_date = end_date
-                st.toast("✅Date filter applied!")
-                st.rerun()
-        
-        with btn_col2:
-            if st.button("🔄 Reset Filter", type="secondary", use_container_width=True):
-                st.session_state.filter_start_date = min_date
-                st.session_state.filter_end_date = max_date
-                st.toast("🔄Date filter reset!")
-                st.rerun()
-                
-                
-        # Use stored values if existing, otherwise use defaults
-        final_start_date = st.session_state.filter_start_date
-        final_end_date = st.session_state.filter_end_date
-        
-        # TO CHECK DATE FILTER VALUES
-        st.caption(f"DEBUG: start_date={start_date}, end_date={end_date}")
-        st.caption(f"DEBUG: final_start_date={final_start_date}, final_end_date={final_end_date}")
-        st.caption(f"DEBUG: filter_button={btn_col1}")
+        # Apply Filter Button
+        if st.button("Apply Filter", type="primary", use_container_width=True):
+            st.session_state.filter_start = start_date
+            st.session_state.filter_end = end_date
+            st.rerun()
         
         # Show current filter
-        st.caption(f"📌 Filtering: {final_start_date.strftime('%d %b %Y')} to {final_end_date.strftime('%d %b %Y')}")
-            
+        if 'filter_start' in st.session_state:
+            st.caption(f"📌 Filtering: {st.session_state.filter_start} to {st.session_state.filter_end}")
+        else:
+            st.caption(f"📌 Filtering: {default_start} to {default_end}")
+            # Initialize sessions state with defaults
+            st.session_state.filter_start = default_start
+            st.session_state.filter_end = default_end
     else:
-        st.warning("💀Data not loaded yet.")
-        final_start_date = datetime.now().date() - timedelta(days=30)
-        final_end_date = datetime.now().date()
+        st.warning("Data not loaded yet.")
+        start_date = datetime.now().date() - timedelta(days=30)
+        end_date = datetime.now().date()
 
     st.markdown("----")
     st.header("🔍 Quick Prediction")
@@ -231,13 +212,13 @@ with st.sidebar:
 # FILTER DATA
 
 #Apply date filter
-mask = (df['at'].dt.date >= final_start_date) & (df['at'].dt.date <= final_end_date)
+mask = (df['at'].dt.date >= st.session_state.filter_start) & (df['at'].dt.date <= st.session_state.filter_end)
 df_filtered = df[mask].copy()
 
 # MAIN CONTENT
 
 st.title("📊 Sentiment Analysis = Wondr by BNI App Reviews")
-st.markdown(f"Analyzing {len(df_filtered)} reviews from {final_start_date.strftime('%d %b %Y')} to {final_end_date.strftime('%d %b %Y')}*")
+st.markdown(f"Analyzing {len(df_filtered)} reviews from {st.session_state.filter_start} to {st.session_state.filter_end}*")
 st.markdown("----")
 
 
@@ -283,7 +264,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
     df_display = df_filtered[display_cols].copy()
     
     if df_display.empty:
-        st.info(f"No reviews available for the selected date range: {final_start_date} to {final_end_date}.")
+        st.info(f"No reviews available for the selected date range: {st.session_state.filter_start} to {st.session_state.filter_end}.")
     else:
         # Rename content column for display
         df_display = df_display.rename(columns={content_col: 'content'})
