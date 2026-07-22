@@ -154,7 +154,7 @@ with st.sidebar:
         with col1:
             start_date = st.date_input(
                 "Start Date",
-                default_start,
+                st.session_state.filter_start_date,
                 min_value=min_date,
                 max_value=max_date,
                 key = "start_date_input"
@@ -163,7 +163,7 @@ with st.sidebar:
         with col2:
             end_date = st.date_input(
                 "End Date",
-                default_end,
+                st.session_state.filter_end_date,
                 min_value=min_date,
                 max_value=max_date,
                 key = "end_date_input"
