@@ -166,12 +166,21 @@ with st.sidebar:
             key="end_date_input"
         )
         
+        col1, col2 = st.columns(2)
         # Apply Filter Button
-        if st.button("Apply Filter", type="primary", use_container_width=True):
-            st.session_state.filter_start = start_date
-            st.session_state.filter_end = end_date
-            st.rerun()
-        
+        with col1:
+            if st.button("Apply Filter", type="primary", use_container_width=True):
+                st.session_state.filter_start = start_date
+                st.session_state.filter_end = end_date
+                st.rerun()
+                
+        # Reset Filter Button
+        with col2:
+            if st.button("Reset Filter", type="secondary", use_container_width=True):
+                st.session_state.filter_start = default_start
+                st.session_state.filter_end = default_end
+                st.rerun()
+
         # Show current filter
         if 'filter_start' in st.session_state:
             st.caption(f"📌 Filtering: {st.session_state.filter_start} to {st.session_state.filter_end}")
@@ -185,6 +194,7 @@ with st.sidebar:
         start_date = datetime.now().date() - timedelta(days=30)
         end_date = datetime.now().date()
 
+    
     st.markdown("----")
     st.header("🔍 Quick Prediction")
 
