@@ -153,11 +153,11 @@ with st.sidebar:
         
         with col1:
             start_date = st.date_input(
-            "Start Date",
-            default_start,
-            min_value=min_date,
-            max_value=max_date,
-            key = "start_date_input"
+                "Start Date",
+                default_start,
+                min_value=min_date,
+                max_value=max_date,
+                key = "start_date_input"
         )
 
         with col2:
@@ -173,35 +173,20 @@ with st.sidebar:
         btn_col1, btn_col2 = st.columns(2)
         
         with btn_col1:
-            filter_button = st.button("✅ Apply Filter", 
-                                      type="primary", 
-                                      use_container_width=True)
+            if st.button("✅ Apply Filter", type="primary", use_container_width=True):
+                st.session_state.filter_start_date = start_date
+                st.session_state.filter_end_date = end_date
+                st.toast("✅Date filter applied!")
+                st.rerun()
         
         with btn_col2:
-            reset_button = st.button("🔄 Reset Filter", 
-                                     type="secondary", 
-                                     use_container_width=True)
-        
-        if 'filter_start_date' not in st.session_state:
-            st.session_state.filter_start_date = min_date
-            st.session_state.filter_end_date = max_date
-        
-        # Handle reset button
-        if reset_button:
-            st.session_state.filter_start_date = min_date
-            st.session_state.filter_end_date = max_date
-            st.toast("🔄Date filter reset!")
-            st.rerun()
-            st.write("Resetting filter....")
-        
-        # Handle Apply Button
-        if filter_button:
-            st.session_state.filter_start_date = start_date
-            st.session_state.filter_end_date = end_date
-            st.toast("✅Date filter applied!")
-            st.rerun()
-            st.write("Applying filter.....")
-        
+            if st.button("🔄 Reset Filter", type="secondary", use_container_width=True):
+                st.session_state.filter_start_date = min_date
+                st.session_state.filter_end_date = max_date
+                st.toast("🔄Date filter reset!")
+                st.rerun()
+                
+                
         # Use stored values if existing, otherwise use defaults
         final_start_date = st.session_state.filter_start_date
         final_end_date = st.session_state.filter_end_date
@@ -209,18 +194,15 @@ with st.sidebar:
         # TO CHECK DATE FILTER VALUES
         st.caption(f"DEBUG: start_date={start_date}, end_date={end_date}")
         st.caption(f"DEBUG: final_start_date={final_start_date}, final_end_date={final_end_date}")
-        st.caption(f"DEBUG: filter_button={filter_button}")
+        st.caption(f"DEBUG: filter_button={btn_col1}")
         
         # Show current filter
         st.caption(f"📌 Filtering: {final_start_date.strftime('%d %b %Y')} to {final_end_date.strftime('%d %b %Y')}")
             
     else:
         st.warning("💀Data not loaded yet.")
-        start_date = datetime.now().date() - timedelta(days=30)
-        end_date = datetime.now().date()
-        final_start_date = start_date
-        final_end_date = end_date
-        filter_button = False
+        final_start_date = datetime.now().date() - timedelta(days=30)
+        final_end_date = datetime.now().date()
 
     st.markdown("----")
     st.header("🔍 Quick Prediction")
