@@ -192,6 +192,7 @@ with st.sidebar:
             st.session_state.filter_end_date = max_date
             st.toast("🔄Date filter reset!")
             st.rerun()
+            st.write("Resetting filter....")
         
         # Handle Apply Button
         if filter_button:
@@ -199,10 +200,16 @@ with st.sidebar:
             st.session_state.filter_end_date = end_date
             st.toast("✅Date filter applied!")
             st.rerun()
+            st.write("Applying filter.....")
         
         # Use stored values if existing, otherwise use defaults
         final_start_date = st.session_state.filter_start_date
         final_end_date = st.session_state.filter_end_date
+        
+        # TO CHECK DATE FILTER VALUES
+        st.caption(f"DEBUG: start_date={start_date}, end_date={end_date}")
+        st.caption(f"DEBUG: final_start_date={final_start_date}, final_end_date={final_end_date}")
+        st.caption(f"DEBUG: filter_button={filter_button}")
         
         # Show current filter
         st.caption(f"📌 Filtering: {final_start_date.strftime('%d %b %Y')} to {final_end_date.strftime('%d %b %Y')}")
