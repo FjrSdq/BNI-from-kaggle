@@ -195,8 +195,8 @@ with st.sidebar:
         
         # Handle Apply Button
         if filter_button:
-            st.session_state.filter_start_date = min_date
-            st.session_state.filter_end_date = max_date
+            st.session_state.filter_start_date = start_date
+            st.session_state.filter_end_date = end_date
             st.toast("✅Date filter applied!")
             st.rerun()
         
