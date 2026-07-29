@@ -310,7 +310,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         col1, col2, col3 = st.columns([1, 3, 1])
         
         with col1:
-            if st.button("⬅️ Previous", disabled=st.session_state.reviews_page == 1):
+            if st.button("⬅️ Previous", disabled=st.session_state.reviews_page <= 1):
                 st.session_state.reviews_page -= 1
                 st.rerun()
         
@@ -333,7 +333,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
             st.caption(f"Page {st.session_state.reviews_page} of {total_pages} ({total_rows} total_reviews)")
         
         with col3:
-            if st.button("➡️ Next", disabled=st.session_state.reviews_page == total_pages):
+            if st.button("➡️ Next", disabled=st.session_state.reviews_page >= total_pages):
                 st.session_state.reviews_page += 1
                 st.rerun()
         
