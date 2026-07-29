@@ -42,7 +42,9 @@ def ensure_model():
                 st.error(f"❌ Error downloading model: {e}")
                 st.stop()
     else:
-        st.toast("✅ Model already exists locally.")
+        if 'model_ready' not in st.session_state or not st.session_state.model_ready:
+            st.toast("✅ Model already exists locally.")
+            st.session_state.model_ready = True
 
 # Call the function to ensure the model is available
 ensure_model()
