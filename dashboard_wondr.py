@@ -312,8 +312,19 @@ with st.expander("📁 Recent Reviews", expanded=True):
                 st.rerun()
         
         with col2:
-            # Show current page info
-            st.write(f"Page {st.session_state.reviews_page} of {total_pages}")
+            # Dropdown for specific page selection
+            page_options = list(range(1, total_pages + 1))
+            selected_page = st.selectbox(
+                "Page",
+                options=page_options,
+                index=st.session_state.reviews_page - 1,
+                key="page_select",
+                label_visibility="collapsed",
+                format_func=lambda x: f"Page {x} of {total_pages}"
+            )
+            if selected_page != st.session_state.reviews_page:
+                st.session_state.reviews_page = selected_page
+                st.rerun()
         
         with col3:
             if st.button("➡️ Next", disabled=st.session_state.reviews_page == total_pages):
