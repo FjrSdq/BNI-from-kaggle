@@ -315,18 +315,18 @@ with st.expander("📁 Recent Reviews", expanded=True):
                 st.rerun()
         
         with col2:
-            # Page Selector (numeric input)
-            page_num = st.number_input(
+            # Page Selector (Dropdown)
+            page_options = list(range(1, total_pages + 1))
+            select_page = st.selectbox(
                 "Page",
-                min_value=1,
-                max_value=total_pages,
-                value=st.session_state.reviews_page,
-                key="page_input",
+                options=page_options,
+                index=min(st.session_state.reviews_page - 1, len(page_options) - 1),
+                key="page_select",
                 label_visibility="collapsed",
-                format="%d"
+                format_func=lambda x: f"Page {x} of {total_pages}"
             )
-            if page_num != st.session_state.reviews_page:
-                st.session_state.reviews_page = page_num
+            if select_page != st.session_state.reviews_page:
+                st.session_state.reviews_page = select_page
                 st.rerun()
             
             # Show page info
@@ -340,7 +340,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         # Calculate slice indices
         start_idx = (st.session_state.reviews_page - 1) * ROWS_PER_PAGE
         end_idx = min(start_idx + ROWS_PER_PAGE, total_rows)
-        
+
         # Slice DF
         df_page = df_display.iloc[start_idx:end_idx]
 
