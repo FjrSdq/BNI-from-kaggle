@@ -312,7 +312,8 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Previous Button
         with col1:
-            if st.button("⬅️ Previous", type="secondary", disabled=st.session_state.reviews_page <= 1, key="prev_button"):
+            prev_disabled = st.session_state.reviews_page <= 1
+            if st.button("⬅️ Previous", type="secondary", disabled=prev_disabled, key="prev_button"):
                 st.session_state.reviews_page -= 1
                 st.rerun()
         
@@ -336,7 +337,8 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Next Button
         with col3:
-            if st.button("➡️ Next", disabled=st.session_state.reviews_page >= total_pages, key="next_button"):
+            next_disabled = st.session_state.reviews_page >= total_pages
+            if st.button("➡️ Next", disabled=next_disabled, key="next_button"):
                 st.session_state.reviews_page += 1
                 st.rerun()
         
