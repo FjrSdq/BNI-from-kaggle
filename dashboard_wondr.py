@@ -297,7 +297,9 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         rows_per_page = 25
         total_rows = len(df_display)
-        total_pages = max(total_rows -1, 0) // rows_per_page + 1 if total_rows > 0 else 1
+        
+        
+        total_pages = (total_rows + rows_per_page - 1) // rows_per_page if total_rows > 0 else 1
         
         # Initialize session state for number of rows to show
         if 'reviews_page' not in st.session_state:
@@ -321,7 +323,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         with col2:
             page_options = list(range(1, total_pages + 1))
             # Use current page as index
-            current_index = min(st.session_state.reviews_page - 1, len(page_options) - 1)
+            current_index = st.session_state.reviews_page - 1
             selected_page = st.selectbox(
                 "Page",
                 options=page_options,
