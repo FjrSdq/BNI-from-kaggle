@@ -320,19 +320,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Dropdown for page selection
         with col2:
-            page_options = list(range(1, total_pages + 1))
-            # Use current page as index
-            selected_page = st.selectbox(
-                "Page",
-                options=page_options,
-                index=st.session_state.reviews_page - 1,
-                key="page_select",
-                label_visibility="collapsed",
-                format_func=lambda x: f"Page {x} of {total_pages}"
-            )
-            # Update session state if selection changes
-            if selected_page != st.session_state.reviews_page:
-                st.session_state.reviews_page = selected_page
+            st.write(f"Page {st.session_state.reviews_page} of {total_pages}")
         
         # Next Button
         with col3:
