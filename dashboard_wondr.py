@@ -297,7 +297,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         rows_per_page = 25
         total_rows = len(df_display)
-        total_pages = max(total_rows -1) // rows_per_page + 1 if total_rows > 0 else 1
+        total_pages = max(total_rows -1, 0) // rows_per_page + 1 if total_rows > 0 else 1
         
         # Initialize session state for number of rows to show
         if 'reviews_page' not in st.session_state:
