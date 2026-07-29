@@ -314,8 +314,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Previous Button
         with col1:
-            prev_disabled = st.session_state.reviews_page <= 1
-            if st.button("⬅️ Previous", type="secondary", disabled=prev_disabled, key="prev_button"):
+            if st.button("⬅️ Previous", type="secondary", disabled=st.session_state.reviews_page <= 1, key="prev_button"):
                 st.session_state.reviews_page -= 1
                 st.rerun()
         
@@ -323,11 +322,10 @@ with st.expander("📁 Recent Reviews", expanded=True):
         with col2:
             page_options = list(range(1, total_pages + 1))
             # Use current page as index
-            current_index = st.session_state.reviews_page - 1
             selected_page = st.selectbox(
                 "Page",
                 options=page_options,
-                index=current_index,
+                index=st.session_state.reviews_page - 1,
                 key="page_select",
                 label_visibility="collapsed",
                 format_func=lambda x: f"Page {x} of {total_pages}"
@@ -339,8 +337,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Next Button
         with col3:
-            next_disabled = st.session_state.reviews_page >= total_pages
-            if st.button("➡️ Next", disabled=next_disabled, key="next_button"):
+            if st.button("➡️ Next", disabled=st.session_state.reviews_page >= total_pages, key="next_button"):
                 st.session_state.reviews_page += 1
                 st.rerun()
         
