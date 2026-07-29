@@ -310,7 +310,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
             st.session_state.reviews_page = total_pages
         
         # Pagination control
-        col1, col2, col3 = st.columns([2, 1, 2])
+        col1, col2, col3 = st.columns([1, 2, 1])
         
         # Previous Button
         with col1:
@@ -324,6 +324,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Next Button
         with col3:
+            st.write("")  # Spacer
             if st.button("➡️ Next", type="secondary", disabled=st.session_state.reviews_page >= total_pages, key="next_button"):
                 st.session_state.reviews_page += 1
                 st.rerun()
