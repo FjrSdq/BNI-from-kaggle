@@ -324,7 +324,6 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Next Button
         with col3:
-            st.write("")  # Spacer
             if st.button("➡️ Next", type="secondary", disabled=st.session_state.reviews_page >= total_pages, key="next_button"):
                 st.session_state.reviews_page += 1
                 st.rerun()
