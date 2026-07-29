@@ -293,13 +293,39 @@ with st.expander("📁 Recent Reviews", expanded=True):
             'Negatif': '❌ Negatif'
         })
         
+        # PAGINATION
+        
         rows_per_page = 25
+        total_rows = len(df_display)
+        total_pages = (total_rows -1) // rows_per_page + 1 if total_rows > 0 else 1
         
         # Initialize session state for number of rows to show
         if 'reviews_page' not in st.session_state:
-            st.session_state.reviews_page = rows_per_page
+            st.session_state.reviews_page = 1
         
-        df_page = df_display.iloc[:st.session_state.reviews_page]
+        # Pagination control
+        col1, col2, col3 = st.columns([1, 2, 1])
+        
+        with col1:
+            if st.button("⬅️ Previous", type="secondary", disabled=st.session_state.reviews_page == 1):
+                st.session_state.reviews_page -= 1
+                st.rerun()
+        
+        with col2:
+            # Show current page info
+            st.write(f"Page {st.session_state.reviews_page} of {total_pages}")
+        
+        with col3:
+            if st.button("➡️ Next", disabled=st.session_state.reviews_page == total_pages):
+                st.session_state.reviews_page += 1
+                st.rerun()
+        
+        # Calculate slice indices
+        start_idx = (st.session_state.reviews_page - 1) * rows_per_page
+        end_idx = min(start_idx + rows_per_page, total_rows)
+        
+        # Slice DF
+        df_page = df_display.iloc[start_idx:end_idx]
 
         # Show ALL rows (no pagination)
         st.dataframe(
@@ -314,13 +340,8 @@ with st.expander("📁 Recent Reviews", expanded=True):
             }
         )
         
-        # Show "Load More" button if there are more rows
-        if st.session_state.reviews_page < len(df_display):
-            if st.button(f"Load More Reviews ({len(df_display) - st.session_state.reviews_page} remaining)", type="secondary"):
-                st.session_state.reviews_page += rows_per_page
-                st.rerun()
-        else:
-            st.caption(f"Showing all {len(df_display)} reviews")
+        # Show row count
+        st.caption(f"Showing {start_idx + 1} to {end_idx} of {total_rows} reviews")
 
 st.markdown("----")
 
