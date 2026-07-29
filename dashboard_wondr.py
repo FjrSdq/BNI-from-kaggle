@@ -318,9 +318,9 @@ with st.expander("📁 Recent Reviews", expanded=True):
         if st.session_state.reviews_page < len(df_display):
             if st.button(f"Load More Reviews ({len(df_display) - st.session_state.reviews_page} remaining)", type="secondary"):
                 st.session_state.reviews_page += rows_per_page
-                st.experimental_rerun()
+                st.rerun()
         else:
-            st.caption("No more reviews to load.")
+            st.caption(f"Showing all {len(df_display)} reviews")
 
 st.markdown("----")
 
