@@ -292,10 +292,18 @@ with st.expander("📁 Recent Reviews", expanded=True):
             'Positif': '✅ Positif',
             'Negatif': '❌ Negatif'
         })
+        
+        rows_per_page = 25
+        
+        # Initialize session state for number of rows to show
+        if 'reviews_page' not in st.session_state:
+            st.session_state.reviews_page = rows_per_page
+        
+        df_page = df_display.iloc[:st.session_state.reviews_page]
 
         # Show ALL rows (no pagination)
         st.dataframe(
-            df_display,
+            df_page,
             use_container_width=True,
             height=400,
             column_config={
@@ -305,6 +313,14 @@ with st.expander("📁 Recent Reviews", expanded=True):
                 'label_name': 'Sentiment'
             }
         )
+        
+        # Show "Load More" button if there are more rows
+        if st.session_state.reviews_page < len(df_display):
+            if st.button(f"Load More Reviews ({len(df_display) - st.session_state.reviews_page} remaining)", type="secondary"):
+                st.session_state.reviews_page += rows_per_page
+                st.experimental_rerun()
+        else:
+            st.caption("No more reviews to load.")
 
 st.markdown("----")
 
