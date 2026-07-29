@@ -333,7 +333,6 @@ with st.expander("📁 Recent Reviews", expanded=True):
             # Update session state if selection changes
             if selected_page != st.session_state.reviews_page:
                 st.session_state.reviews_page = selected_page
-                st.rerun()
         
         # Next Button
         with col3:
