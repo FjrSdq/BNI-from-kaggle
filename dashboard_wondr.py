@@ -297,37 +297,46 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         rows_per_page = 25
         total_rows = len(df_display)
-        total_pages = (total_rows -1) // rows_per_page + 1 if total_rows > 0 else 1
+        total_pages = max(total_rows -1) // rows_per_page + 1 if total_rows > 0 else 1
         
         # Initialize session state for number of rows to show
         if 'reviews_page' not in st.session_state:
             st.session_state.reviews_page = 1
+            
+        # Make sure current page is within bounds
+        if st.session_state.reviews_page > total_pages:
+            st.session_state.reviews_page = total_pages
         
         # Pagination control
         col1, col2, col3 = st.columns([1, 2, 1])
         
+        # Previous Button
         with col1:
-            if st.button("⬅️ Previous", type="secondary", disabled=st.session_state.reviews_page == 1):
+            if st.button("⬅️ Previous", type="secondary", disabled=st.session_state.reviews_page <= 1, key="prev_button"):
                 st.session_state.reviews_page -= 1
                 st.rerun()
         
+        # Dropdown for page selection
         with col2:
-            # Dropdown for specific page selection
             page_options = list(range(1, total_pages + 1))
+            # Use current page as index
+            current_index = min(st.session_state.reviews_page - 1, len(page_options) - 1)
             selected_page = st.selectbox(
                 "Page",
                 options=page_options,
-                index=st.session_state.reviews_page - 1,
+                index=current_index,
                 key="page_select",
                 label_visibility="collapsed",
                 format_func=lambda x: f"Page {x} of {total_pages}"
             )
+            # Update session state if selection changes
             if selected_page != st.session_state.reviews_page:
                 st.session_state.reviews_page = selected_page
                 st.rerun()
         
+        # Next Button
         with col3:
-            if st.button("➡️ Next", disabled=st.session_state.reviews_page == total_pages):
+            if st.button("➡️ Next", disabled=st.session_state.reviews_page >= total_pages, key="next_button"):
                 st.session_state.reviews_page += 1
                 st.rerun()
         
