@@ -320,7 +320,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Dropdown for page selection
         with col2:
-            st.write(f"Page {st.session_state.reviews_page} of {total_pages}")
+            st.markdown(f"<div style='text-align: center; padding-top: 8px;'>Page {st.session_state.reviews_page} of {total_pages}</div>", unsafe_allow_html=True)
         
         # Next Button
         with col3:
