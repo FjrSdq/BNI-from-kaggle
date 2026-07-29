@@ -292,71 +292,19 @@ with st.expander("📁 Recent Reviews", expanded=True):
             'Positif': '✅ Positif',
             'Negatif': '❌ Negatif'
         })
-        
-        # PAGINATION
-        
-        # Set rows per page
-        ROWS_PER_PAGE = 25
-        
-        # Calculate total pages
-        total_rows = len(df_display)
-        total_pages = (total_rows - 1) // ROWS_PER_PAGE + 1 if total_rows > 0 else 1
-        
-        # Initialize current page in session state
-        if 'reviews_page' not in st.session_state:
-            st.session_state.reviews_page = 1
-        
-        # Create pagination control
-        col1, col2, col3 = st.columns([1, 3, 1])
-        
-        with col1:
-            if st.button("⬅️ Previous", disabled=st.session_state.reviews_page <= 1):
-                st.session_state.reviews_page -= 1
-                st.rerun()
-        
-        with col2:
-            # Page Selector (Dropdown)
-            page_options = list(range(1, total_pages + 1))
-            select_page = st.selectbox(
-                "Page",
-                options=page_options,
-                index=min(st.session_state.reviews_page - 1, len(page_options) - 1),
-                key="page_select",
-                label_visibility="collapsed",
-                format_func=lambda x: f"Page {x} of {total_pages}"
-            )
-            if select_page != st.session_state.reviews_page:
-                st.session_state.reviews_page = select_page
-                st.rerun()
-            
-            # Show page info
-            st.caption(f"Page {st.session_state.reviews_page} of {total_pages} ({total_rows} total_reviews)")
-        
-        with col3:
-            if st.button("➡️ Next", disabled=st.session_state.reviews_page >= total_pages):
-                st.session_state.reviews_page += 1
-                st.rerun()
-        
-        # Calculate slice indices
-        start_idx = (st.session_state.reviews_page - 1) * ROWS_PER_PAGE
-        end_idx = min(start_idx + ROWS_PER_PAGE, total_rows)
 
-        # Slice DF
-        df_page = df_display.iloc[start_idx:end_idx]
-
+        # Show ALL rows (no pagination)
         st.dataframe(
-            df_page,
+            df_display,
             use_container_width=True,
             height=400,
             column_config={
-                'reviewId':'Review ID',
-                'content':'Review Content',
-                'at':'Date',
-                'label_name':'Sentiment'
+                'reviewId': 'Review ID',
+                'content': 'Review Content',
+                'at': 'Date',
+                'label_name': 'Sentiment'
             }
         )
-        
-        st.caption(f"Showing rows {start_idx + 1} to {end_idx} of {total_rows}")
 
 st.markdown("----")
 
