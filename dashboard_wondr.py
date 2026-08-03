@@ -339,8 +339,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
             page_cols = st.columns([0.5] + [1] * num_cols + [0.5])
                 
             # Left spacer
-            with page_cols[0].write(""):
-                st.write("")
+            with page_cols[0]:st.write("")
             
             # Page buttons
             for idx, page_num in enumerate(range(start_page, end_page + 1)):
@@ -354,8 +353,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
                         st.rerun()
                 
             # Right spacer
-            with page_cols[-1]:
-                st.write("")
+            with page_cols[-1]:st.write("")
         
         # Next Button
         with col3:
