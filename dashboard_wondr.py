@@ -310,7 +310,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
             st.session_state.reviews_page = total_pages
         
         # Pagination control
-        col1, col2, col3 = st.columns([1, 2, 1])
+        col1, col2, col3 = st.columns([1, 4, 1])
         
         # Previous Button
         with col1:
