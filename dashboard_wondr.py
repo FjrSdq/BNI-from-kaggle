@@ -320,27 +320,31 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Numbered page
         with col2:
-            max_displayed = 7
-            half_displayed = max_displayed // 2
+            # Centering the page numbers
+            left, col_container, right = st.columns([1, 5, 1])
             
-            start_page = max(1, st.session_state.reviews_page - half_displayed)
-            end_page = min(total_pages, st.session_state.reviews_page + half_displayed)
+            with col_container:
+                max_displayed = 7
+                half_displayed = max_displayed // 2
             
-            if end_page - start_page < max_displayed - 1:
-                if start_page == 1:
-                    end_page = min(total_pages, start_page + max_displayed - 1)
-                elif end_page == total_pages:
-                    start_page = max(1, end_page - max_displayed + 1)
+                start_page = max(1, st.session_state.reviews_page - half_displayed)
+                end_page = min(total_pages, st.session_state.reviews_page + half_displayed)
             
-            # Columns for each page
-            num_cols = min(end_page - start_page + 1, max_displayed)
-            page_cols = st.columns(num_cols)
+                if end_page - start_page < max_displayed - 1:
+                    if start_page == 1:
+                        end_page = min(total_pages, start_page + max_displayed - 1)
+                    elif end_page == total_pages:
+                        start_page = max(1, end_page - max_displayed + 1)
             
-            for idx, page_num in enumerate(range(start_page, end_page + 1)):
-                with page_cols[idx]:
-                    if st.button(str(page_num), type="primary" if page_num == st.session_state.reviews_page else "secondary", key=f"page_{page_num}"):
-                        st.session_state.reviews_page = page_num
-                        st.rerun()
+                # Columns for each page
+                num_cols = min(end_page - start_page + 1, max_displayed)
+                page_cols = st.columns(num_cols)
+            
+                for idx, page_num in enumerate(range(start_page, end_page + 1)):
+                    with page_cols[idx]:
+                        if st.button(str(page_num), type="primary" if page_num == st.session_state.reviews_page else "secondary", key=f"page_{page_num}"):
+                            st.session_state.reviews_page = page_num
+                            st.rerun()
         
         # Next Button
         with col3:
