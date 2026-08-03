@@ -346,8 +346,8 @@ with st.expander("📁 Recent Reviews", expanded=True):
                         st.session_state.reviews_page = page_num
                         st.rerun()
                 
-                # Right spacer
-                page_cols[-1].write("")
+            # Right spacer
+            page_cols[-1].write("")
         
         # Next Button
         with col3:
