@@ -333,21 +333,29 @@ with st.expander("📁 Recent Reviews", expanded=True):
                     start_page = max(1, end_page - max_displayed + 1)
             
             # Columns for each page
-            num_cols = end_page - start_page + 1, max_displayed
+            num_cols = end_page - start_page + 1
+            
+            # Columns : left spacer + page numbers + right spacer
             page_cols = st.columns([0.5] + [1] * num_cols[0] + [0.5])
                 
             # Left spacer
-            page_cols[0].write("")
+            with page_cols[0].write(""):
+                st.write("")
             
             # Page buttons
             for idx, page_num in enumerate(range(start_page, end_page + 1)):
-                with page_cols[idx]:
-                    if st.button(str(page_num), type="primary" if page_num == st.session_state.reviews_page else "secondary", key=f"page_{page_num}"):
+                col_idx = idx + 1 # Offset by 1 to skip left spacer
+                with page_cols[col_idx]:
+                    if st.button(str(page_num), 
+                                 type="primary" if page_num == st.session_state.reviews_page else "secondary", 
+                                 key=f"page_{page_num}",
+                                 use_container_width=True):
                         st.session_state.reviews_page = page_num
                         st.rerun()
                 
             # Right spacer
-            page_cols[-1].write("")
+            with page_cols[-1]:
+                st.write("")
         
         # Next Button
         with col3:
