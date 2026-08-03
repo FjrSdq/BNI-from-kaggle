@@ -336,7 +336,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
             num_cols = end_page - start_page + 1
             
             # Columns : left spacer + page numbers + right spacer
-            page_cols = st.columns([0.5] + [1] * num_cols[0] + [0.5])
+            page_cols = st.columns([0.5] + [1] * num_cols + [0.5])
                 
             # Left spacer
             with page_cols[0].write(""):
