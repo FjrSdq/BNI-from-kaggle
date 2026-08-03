@@ -338,7 +338,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
             
             for idx, page_num in enumerate(range(start_page, end_page + 1)):
                 with page_cols[idx]:
-                    if st.button(str(page_num), use_container_width=True, type="primary" if page_num == st.session_state.reviews_page else "secondary", key=f"page_{page_num}"):
+                    if st.button(str(page_num), type="primary" if page_num == st.session_state.reviews_page else "secondary", key=f"page_{page_num}"):
                         st.session_state.reviews_page = page_num
                         st.rerun()
         
