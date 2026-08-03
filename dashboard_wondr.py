@@ -295,7 +295,7 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # PAGINATION
         
-        rows_per_page = 25
+        rows_per_page = 50
         total_rows = len(df_display)
         
         
@@ -318,11 +318,29 @@ with st.expander("📁 Recent Reviews", expanded=True):
                 st.session_state.reviews_page -= 1
                 st.rerun()
         
-        # Dropdown for page selection
+        # Numbered page
         with col2:
-            left, center, right = st.columns([1, 2, 1])
-            with center:
-                st.write(f"Page : {st.session_state.reviews_page} of {total_pages}")
+            max_displayed = 7
+            half_displayed = max_displayed // 2
+            
+            start_page = max(1, st.session_state.reviews_page - half_displayed)
+            end_page = min(total_pages, st.session_state.reviews_page + half_displayed)
+            
+            if end_page - start_page < max_displayed - 1:
+                if start_page == 1:
+                    end_page = min(total_pages, start_page + max_displayed - 1)
+                elif end_page == total_pages:
+                    start_page = max(1, end_page - max_displayed + 1)
+            
+            # Columns for each page
+            num_cols = min(end_page - start_page + 1, max_displayed)
+            page_cols = st.columns(num_cols)
+            
+            for idx, page_num in enumerate(range(start_page, end_page + 1)):
+                with page_cols[idx]:
+                    if st.button(str(page_num), use_container_width=True, type="primary" if page_num == st.session_state.reviews_page else "secondary", key=f"page_{page_num}"):
+                        st.session_state.reviews_page = page_num
+                        st.rerun()
         
         # Next Button
         with col3:
