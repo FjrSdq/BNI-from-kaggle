@@ -320,7 +320,8 @@ with st.expander("📁 Recent Reviews", expanded=True):
         
         # Dropdown for page selection
         with col2:
-            st.write(f"Page : {st.session_state.reviews_page} of {total_pages}")
+            with st.container():
+                st.write(f"Page : {st.session_state.reviews_page} of {total_pages}")
         
         with col3:
             pass  # Empty column for spacing
